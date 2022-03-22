@@ -50,22 +50,26 @@ const Home = ({ user, logout }) => {
   };
 
   const saveMessage = async (body) => {
+    console.log('saveMessage', body)
     const { data } = await axios.post('/api/messages', body);
     return data;
   };
 
   const sendMessage = (data, body) => {
+    console.log('sendMessage data', data)
+    console.log('sendMessage body', body)
     socket.emit('new-message', {
       message: data.message,
       recipientId: body.recipientId,
       sender: data.sender,
+      conversationId: data.conversationId
     });
   };
 
   const postMessage = (body) => {
     try {
       const data = saveMessage(body);
-
+      console.log('postMessage', data)
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
       } else {
