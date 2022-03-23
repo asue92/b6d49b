@@ -55,6 +55,7 @@ const Home = ({ user, logout }) => {
   };
 
   const sendMessage = (data, body) => {
+
     socket.emit('new-message', {
       message: data.message,
       recipientId: body.recipientId,
@@ -93,7 +94,8 @@ const Home = ({ user, logout }) => {
 
   const addMessageToConversation = useCallback(
     (data) => {
-      // removed redundant logic for new conversations
+      const { message } = data;
+      // removed redundant logic for new conversation
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
