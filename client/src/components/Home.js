@@ -50,7 +50,6 @@ const Home = ({ user, logout }) => {
   };
 
   const saveMessage = async (body) => {
-    console.log('saveMessage', body)
     const { data } = await axios.post('/api/messages', body);
     return data;
   };
@@ -69,7 +68,6 @@ const Home = ({ user, logout }) => {
   const postMessage = async (body) => {
     try {
       const data = await saveMessage(body);
-      console.log('postMessage', data)
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
       } else {
@@ -109,7 +107,6 @@ const Home = ({ user, logout }) => {
         newConvo.latestMessageText = message.text;
         setConversations((prev) => [newConvo, ...prev]);
       }
-      console.log('addMessage message', message)
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
@@ -202,7 +199,7 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
-
+  console.log('conversations before return', conversations)
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
