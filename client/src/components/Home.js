@@ -61,7 +61,6 @@ const Home = ({ user, logout }) => {
       message: data.message,
       recipientId: body.recipientId,
       sender: data.sender,
-      conversationId: data.conversationId
     });
   };
 
@@ -69,6 +68,7 @@ const Home = ({ user, logout }) => {
     try {
       const data = await saveMessage(body);
       if (!body.conversationId) {
+        console.log('this has to be new!!')
         addNewConvo(body.recipientId, data.message);
       } else {
         addMessageToConversation(data);
@@ -104,6 +104,7 @@ const Home = ({ user, logout }) => {
           otherUser: sender,
           messages: [message],
         };
+        console.log('newConvo', newConvo)
         newConvo.latestMessageText = message.text;
         setConversations((prev) => [newConvo, ...prev]);
       }
@@ -113,7 +114,8 @@ const Home = ({ user, logout }) => {
           convo.latestMessageText = message.text;
         }
       });
-      setConversations(conversations);
+
+      setConversations([...conversations]);
     },
     [setConversations, conversations]
   );
