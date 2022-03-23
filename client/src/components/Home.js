@@ -55,8 +55,6 @@ const Home = ({ user, logout }) => {
   };
 
   const sendMessage = (data, body) => {
-    console.log('sendMessage data', data)
-    console.log('sendMessage body', body)
     socket.emit('new-message', {
       message: data.message,
       recipientId: body.recipientId,
@@ -68,7 +66,6 @@ const Home = ({ user, logout }) => {
     try {
       const data = await saveMessage(body);
       if (!body.conversationId) {
-        console.log('this has to be new!!')
         addNewConvo(body.recipientId, data.message);
       } else {
         addMessageToConversation(data);
@@ -96,20 +93,7 @@ const Home = ({ user, logout }) => {
 
   const addMessageToConversation = useCallback(
     (data) => {
-      // if sender isn't null, that means the message needs to be put in a brand new convo
-      const { message, sender = null } = data;
-      // if (sender !== null) {
-      //   const newConvo = {
-      //     id: message.conversationId,
-      //     otherUser: sender,
-      //     messages: [message],
-      //   };
-      //   console.log('newConvo', newConvo)
-      //   newConvo.latestMessageText = message.text;
-      //   setConversations((prev) => [newConvo, ...prev]);
-      // }
-
-      // I'm not sure if this logic is necessary, but keeping the code here in case.
+      // removed redundant logic for new conversations
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
@@ -203,7 +187,6 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
-  console.log('conversations before return', conversations)
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
