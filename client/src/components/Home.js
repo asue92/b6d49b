@@ -174,18 +174,12 @@ const Home = ({ user, logout }) => {
     const fetchConversations = async () => {
       try {
         const { data } = await axios.get('/api/conversations');
-        data.forEach((conversation) => {
-           conversation.messages = conversation.messages.sort((a, b) => {
-            const dateA = new Date(a.createdAt),
-                  dateB = new Date(b.createdAt);
-            return dateA - dateB
-          })
-        })
         setConversations(data);
       } catch (error) {
         console.error(error);
       }
     };
+
     if (!user.isFetching) {
       fetchConversations();
     }
