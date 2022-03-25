@@ -96,7 +96,6 @@ const Home = ({ user, logout }) => {
   const addMessageToConversation = useCallback(
     (data) => {
       const message = data.message
-      console.log(data)
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
@@ -175,7 +174,13 @@ const Home = ({ user, logout }) => {
     const fetchConversations = async () => {
       try {
         const { data } = await axios.get('/api/conversations');
-        console.log('data in home', data)
+        data.forEach((conversation) => {
+           conversation.messages = conversation.messages.sort((a, b) => {
+            const dateA = new Date(a.createdAt),
+                  dateB = new Date(b.createdAt);
+            return dateA - dateB
+          })
+        })
         setConversations(data);
       } catch (error) {
         console.error(error);
@@ -191,7 +196,6 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
-  console.log('conversations', conversations)
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
