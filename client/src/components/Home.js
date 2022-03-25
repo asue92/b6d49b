@@ -87,23 +87,24 @@ const Home = ({ user, logout }) => {
           convo.id = message.conversationId;
         }
       });
-      setConversations([...conversations]);
+      const convoCopy = [...conversations];
+      setConversations([...convoCopy]);
     },
     [setConversations, conversations]
   );
 
   const addMessageToConversation = useCallback(
     (data) => {
-      const { message } = data;
-      // removed redundant logic for new conversation
+      const message = data.message
+      console.log(data)
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
           convo.latestMessageText = message.text;
         }
       });
-
-      setConversations([...conversations]);
+      const convoCopy = [...conversations]
+      setConversations([...convoCopy]);
     },
     [setConversations, conversations]
   );
@@ -174,6 +175,7 @@ const Home = ({ user, logout }) => {
     const fetchConversations = async () => {
       try {
         const { data } = await axios.get('/api/conversations');
+        console.log('data in home', data)
         setConversations(data);
       } catch (error) {
         console.error(error);
@@ -189,6 +191,7 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
+  console.log('conversations', conversations)
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
