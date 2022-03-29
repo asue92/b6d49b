@@ -71,7 +71,6 @@ const Home = ({ user, logout }) => {
       } else {
         addMessageToConversation(data);
       }
-
       sendMessage(data, body);
     } catch (error) {
       console.error(error);
@@ -117,9 +116,41 @@ const Home = ({ user, logout }) => {
     []
   );
 
+  const putReadStatus = async (otherUserId, conversationId) =>  {
+    try {
+      const reqBody = {
+        otherUserId: otherUserId,
+        conversationId: conversationId
+      }
+      const {data} = await axios.put('/api/messages/read', reqBody);
+      setReadStatus(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  const setReadStatus = useCallback((conversationId) => {
+    setConversations((prev) => 
+    prev.map((convo) => {
+      if (convo.id === conversationId){
+        const convoCopy = {...convo}
+        convoCopy.notificationCount = 0;
+        return convoCopy
+      } else {
+        return convo
+      }
+    })
+    )
+  }, [])
 
-  const setActiveChat = (username) => {
+
+  const setActiveChat = (username, otherUserId, conversationId) => {
+    if (!conversationId){
+      setActiveConversation(username)
+    } else {
+    putReadStatus(otherUserId, conversationId)
     setActiveConversation(username);
+    }
   };
 
   const addOnlineUser = useCallback((id) => {
@@ -191,7 +222,6 @@ const Home = ({ user, logout }) => {
             return dateA - dateB;
           })
         })
-        console.log(data)
         setConversations(data);
       } catch (error) {
         console.error(error);
