@@ -23,9 +23,8 @@ const useStyles = makeStyles((theme) => ({
 const ChatContent = ({ conversation }) => {
   const classes = useStyles();
 
-  const { otherUser } = conversation;
+  const { otherUser, notificationCount } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
-
   return (
     <Box className={classes.root}>
       <Box>
@@ -35,6 +34,7 @@ const ChatContent = ({ conversation }) => {
         <Typography className={classes.previewText}>
           {latestMessageText}
         </Typography>
+        {notificationCount}gio
       </Box>
     </Box>
   );
