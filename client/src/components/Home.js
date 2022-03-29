@@ -191,6 +191,7 @@ const Home = ({ user, logout }) => {
             return dateA - dateB;
           })
         })
+        console.log(data)
         setConversations(data);
       } catch (error) {
         console.error(error);
