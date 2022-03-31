@@ -11,6 +11,8 @@ router.get("/", async (req, res, next) => {
       return res.sendStatus(401);
     }
     const userId = req.user.id;
+
+    // need to use methods for formatting query based on more than 2 users
     const conversations = await Conversation.findAll({
       where: {
         [Op.or]: {

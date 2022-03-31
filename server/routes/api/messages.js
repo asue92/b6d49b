@@ -16,14 +16,18 @@ router.post("/", async (req, res, next) => {
       const message = await Message.create({ senderId, text, conversationId });
       return res.json({ message, sender });
     }
+    let idArray = [senderId, recipientId]
+    // if recipientId is an array of multiple users, a method must be used to save those values into our idArray
+
     // if we don't have conversation id, find a conversation to make sure it doesn't already exist
+    // search all possibilities of users
     let conversation = await Conversation.findConversation(
-      senderId,
-      recipientId
+      idArray
     );
 
     if (!conversation) {
-      // create conversation
+      // use formatCreation method to create object passed to Sequelize
+      // create a conversation with multiple userID values, first is sender
       conversation = await Conversation.create({
         user1Id: senderId,
         user2Id: recipientId,
