@@ -4,14 +4,10 @@ const { Op } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
 
 const getNotificationCount = (messages, userId) => {
-  let count = 0;
-  for (let i = 0; i < messages.length; i++){
-    let currentMessage = messages[i];
-    if (currentMessage.readStatus === false && currentMessage.senderId === userId){
-      count++
-    }
-  }
-  return count;
+  let count = messages.filter((message) => {
+   return message.readStatus === false && message.senderId === userId
+  })
+  return count.length;
 }
 
 // get all conversations for a user, include latest message text for preview, and all messages
@@ -82,7 +78,6 @@ router.get("/", async (req, res, next) => {
       convoJSON.notificationCount = notificationCount;
       conversations[i] = convoJSON;
     }
-
     res.json(conversations);
   } catch (error) {
     next(error);
