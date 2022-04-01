@@ -1,13 +1,20 @@
 const router = require("express").Router();
 const { User, Conversation, Message } = require("../../db/models");
-const { Op } = require("sequelize");
+const { Op, UniqueConstraintError } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
 
 const getNotificationCount = (messages, userId) => {
-  let count = messages.filter((message) => {
+  const count = messages.filter((message) => {
    return message.readStatus === false && message.senderId === userId
   })
   return count.length;
+}
+
+const getLastRead = (messages, userId) => {
+  const readArray = messages.filter((message) => {
+    return message.readStatus === true && message.senderId === userId
+  })
+  return readArray[0]
 }
 
 // get all conversations for a user, include latest message text for preview, and all messages
@@ -73,6 +80,10 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser.online = false;
       }
       const notificationCount = getNotificationCount(convoJSON.messages, convoJSON.otherUser.id)
+      const lastRead = getLastRead(convoJSON.messages, userId )
+      if (lastRead){
+          convoJSON.lastReadMessageId = lastRead.id
+      }
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[0].text;
       convoJSON.notificationCount = notificationCount;
