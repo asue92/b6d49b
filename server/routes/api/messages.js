@@ -45,7 +45,7 @@ router.post("/", async (req, res, next) => {
 
 router.put('/read', async (req, res, next) => {
   try {
-    if (!req.user.id || req.user.id !== req.body.userId) {
+    if (!req.user || req.user.id !== req.body.userId) {
       return res.sendStatus(401);
     }
     const otherUserId = req.body.otherUserId,
