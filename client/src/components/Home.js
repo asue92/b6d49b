@@ -116,12 +116,11 @@ const Home = ({ user, logout }) => {
     []
   );
 
-  const putReadStatus = async (otherUserId, conversationId, userId) =>  {
+  const putReadStatus = async (otherUserId, conversationId) =>  {
     try {
       const reqBody = {
         otherUserId: otherUserId,
         conversationId: conversationId,
-        userId: userId
       }
       const {data} = await axios.put('/api/messages/read', reqBody);
       setReadStatus(data)
@@ -145,14 +144,14 @@ const Home = ({ user, logout }) => {
   }, [])
 
 
-  const setActiveChat = (conversation, userId) => {
+  const setActiveChat = (conversation) => {
     const conversationId = conversation.id,
           otherUserId = conversation.otherUser.id,
           username = conversation.otherUser.username;
     if (!conversationId){
       setActiveConversation(username)
     } else {
-    putReadStatus(otherUserId, conversationId, userId)
+    putReadStatus(otherUserId, conversationId)
     setActiveConversation(username);
     }
   };
