@@ -242,7 +242,6 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
-  console.log('conversations on home', conversations)
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>

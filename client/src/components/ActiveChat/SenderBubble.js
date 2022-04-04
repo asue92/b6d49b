@@ -46,7 +46,7 @@ const SenderBubble = ({ time, text, otherUser, readStatus, lastReadMessageText }
       {readStatus && text === lastReadMessageText && <Avatar className={classes.avatar}
                alt={otherUser.username}
                src={otherUser.photoUrl}
-        ></Avatar>}
+       />}
     
     </Box>
   );

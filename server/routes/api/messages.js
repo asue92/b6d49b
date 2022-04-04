@@ -45,11 +45,22 @@ router.post("/", async (req, res, next) => {
 
 router.put('/read', async (req, res, next) => {
   try {
-    if (!req.user || req.user.id !== req.body.userId) {
+    if (!req.user) {
       return res.sendStatus(401);
     }
+    // clean up logic for sending user ID from the front end
     const otherUserId = req.body.otherUserId,
           conversationId = req.body.conversationId
+    const conversation = await Conversation.findByPk(conversationId, {
+      include: {
+        model: Message
+      }
+    });
+    const senderId = conversation.messages[conversation.messages.length - 1].senderId
+    if (req.user.id  !== conversation.user1Id || req.user.id !== conversation.user2Id || req.user.id === senderId){
+      return res.sendStatus(403)
+    }
+
     await Message.update({readStatus: true}, {
       where: {
         senderId: otherUserId,
